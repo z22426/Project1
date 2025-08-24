@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Todo App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-check-circle"></i>
+                    <h1>Smart Todo</h1>
+                </div>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-content">
+                    <div class="sidebar-section">
+                        <h3>Categories</h3>
+                        <div class="category-filters">
+                            <button class="category-filter active" data-category="all">
+                                <span class="category-dot all"></span>
+                                All Tasks
+                            </button>
+                            <button class="category-filter" data-category="work">
+                                <span class="category-dot work"></span>
+                                Work
+                            </button>
+                            <button class="category-filter" data-category="personal">
+                                <span class="category-dot personal"></span>
+                                Personal
+                            </button>
+                            <button class="category-filter" data-category="shopping">
+                                <span class="category-dot shopping"></span>
+                                Shopping
+                            </button>
+                            <button class="category-filter" data-category="health">
+                                <span class="category-dot health"></span>
+                                Health
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <h3>Priority</h3>
+                        <div class="priority-filters">
+                            <button class="priority-filter active" data-priority="all">
+                                <span class="priority-indicator all"></span>
+                                All
+                            </button>
+                            <button class="priority-filter" data-priority="high">
+                                <span class="priority-indicator high"></span>
+                                High
+                            </button>
+                            <button class="priority-filter" data-priority="medium">
+                                <span class="priority-indicator medium"></span>
+                                Medium
+                            </button>
+                            <button class="priority-filter" data-priority="low">
+                                <span class="priority-indicator low"></span>
+                                Low
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>Status</h3>
+                        <div class="status-filters">
+                            <button class="status-filter active" data-status="all">
+                                <i class="fas fa-list"></i>
+                                All
+                            </button>
+                            <button class="status-filter" data-status="pending">
+                                <i class="fas fa-clock"></i>
+                                Pending
+                            </button>
+                            <button class="status-filter" data-status="completed">
+                                <i class="fas fa-check"></i>
+                                Completed
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Task Area -->
+            <div class="task-area">
+                <!-- Search and Add Task Section -->
+                <div class="task-controls">
+                    <div class="search-container">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="searchInput" placeholder="Search tasks..." class="search-input">
+                            <button class="clear-search" id="clearSearch" aria-label="Clear search">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button class="add-task-btn" id="addTaskBtn">
+                        <i class="fas fa-plus"></i>
+                        Add Task
+                    </button>
+                </div>
+
+                <!-- Task List Container -->
+                <div class="task-list-container">
+                    <div class="task-list" id="taskList">
+                        <!-- Tasks will be dynamically inserted here -->
+                    </div>
+                    
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-state-content">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h3>No tasks yet</h3>
+                            <p>Start by adding your first task to get organized!</p>
+                            <button class="add-first-task-btn" id="addFirstTaskBtn">
+                                <i class="fas fa-plus"></i>
+                                Add Your First Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task Statistics -->
+                <div class="task-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalTasks">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="pendingTasks">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="completedTasks">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Task Modal -->
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Task</h2>
+                <button class="modal-close" id="modalClose" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form class="task-form" id="taskForm">
+                <div class="form-group">
+                    <label for="taskTitle">Task Title *</label>
+                    <input type="text" id="taskTitle" name="title" required placeholder="Enter task title">
+                </div>
+                
+                <div class="form-group">
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription" name="description" placeholder="Enter task description (optional)"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskCategory">Category</label>
+                        <select id="taskCategory" name="category">
+                            <option value="work">Work</option>
+                            <option value="personal">Personal</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="health">Health</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskPriority">Priority</label>
+                        <select id="taskPriority" name="priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskDueDate">Due Date</label>
+                        <input type="date" id="taskDueDate" name="dueDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taskReminder">Reminder</label>
+                        <input type="datetime-local" id="taskReminder" name="reminder">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-primary" id="saveBtn">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
